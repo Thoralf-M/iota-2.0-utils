@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getClient } from "./Client.svelte";
+    import { getClient } from "../Client.svelte";
     import init, { Utils, UtxoChangesResponse } from "@iota/sdk-wasm/web";
     import { onMount } from "svelte";
     onMount(async () => {
@@ -11,7 +11,7 @@
         }
     });
     let startIndex = 0;
-    let endIndex = 0;
+    let endIndex = 10;
     let utxoChanges: UtxoChangesResponse[] = [];
     let requestingData = false;
     let output: any;
@@ -152,7 +152,7 @@
                 </div>
             {/if}
         {:else}
-            No new outputs
+            No UTXO changes
         {/if}
     </div>
 </main>

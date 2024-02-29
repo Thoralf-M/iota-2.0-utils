@@ -1,12 +1,37 @@
 <script lang="ts" context="module">
-    import { Client } from "@iota/sdk-wasm/web";
+    import { Client, initLogger } from "@iota/sdk-wasm/web";
+    import { writable } from "svelte/store";
 
-    let node = "https://api.testnet.shimmer.network";
+    let nodeUrlStorage = localStorageStore("nodeUrl", "http://localhost:8050");
+    let nodeUrl = "";
+    nodeUrlStorage.subscribe((value) => {
+        nodeUrl = value;
+    });
+
+    let loggerInitialized = false;
     export const getClient = async () => {
+        if (!loggerInitialized) {
+            await initLogger();
+            loggerInitialized = true;
+        }
         return await Client.create({
-            nodes: [node],
+            nodes: [nodeUrl],
         });
     };
+
+    function localStorageStore(key: string, initial: string) {
+        const value = localStorage.getItem(key);
+        const store = writable(value == null ? initial : JSON.parse(value));
+        store.subscribe((v) => localStorage.setItem(key, JSON.stringify(v)));
+        return store;
+    }
 </script>
 
-<input size="50" bind:value={node} placeholder="node url" />
+<main>
+    <input
+        size="50"
+        bind:value={nodeUrl}
+        placeholder="node url"
+        on:input={() => nodeUrlStorage.update((v) => (v = nodeUrl))}
+    />
+</main>

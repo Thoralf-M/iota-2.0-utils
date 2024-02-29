@@ -1,22 +1,13 @@
 <script lang="ts">
-    import { getClient } from "./Client.svelte";
-    import init, { initLogger } from "@iota/sdk-wasm/web";
-    import { onMount } from "svelte";
-    onMount(async () => {
-        try {
-            await init();
-            await initLogger();
-        } catch (err) {
-            alert(err);
-        }
-    });
+    // @ts-nocheck
+    import { getClient } from "../Client.svelte";
 
     let pageSize = 10;
 
     let outputIds: string[] = [];
     let requestingData = false;
     let output: any;
-    let selectedOutputType = "basic";
+    let selectedOutputType = "outputs";
     let usedQueryParameters = "";
     let explorerUrl = "";
 
@@ -76,6 +67,9 @@
 
             usedQueryParameters = JSON.stringify(queryParameters);
             switch (selectedOutputType) {
+                case "outputs":
+                    response = await client.outputIds(queryParameters);
+                    break;
                 case "account":
                     response = await client.accountOutputIds(queryParameters);
                     break;
@@ -146,7 +140,7 @@
     />
     <div class="outputTypeSelector">
         Output type:
-        {#each ["account", "basic", "foundry", "nft", "delegation", "anchor"] as type}
+        {#each ["outputs", "account", "basic", "foundry", "nft", "delegation", "anchor"] as type}
             <!-- Highlight selected type -->
             {#if type == selectedOutputType}
                 <button
