@@ -3,7 +3,7 @@
     import { writable } from "svelte/store";
 
     let nodeUrlStorage = localStorageStore("nodeUrl", "http://localhost:8050");
-    let nodeUrl = "";
+    export let nodeUrl = "";
     nodeUrlStorage.subscribe((value) => {
         nodeUrl = value;
     });

@@ -103,15 +103,15 @@
         try {
             let client = await getClient();
             output = await client.getOutput(outputId);
-            let info = await client.getInfo();
+            let nodeInfo = await client.getNodeInfo();
             if (
-                info.nodeInfo.protocolParameters[0].parameters.networkName ==
+                nodeInfo.info.protocolParameters[0].parameters.networkName ==
                 "testnet-1"
             ) {
                 explorerUrl =
                     "https://explorer.shimmer.network/testnet/transaction/";
             } else if (
-                info.nodeInfo.protocolParameters[0].parameters.networkName ==
+                nodeInfo.info.protocolParameters[0].parameters.networkName ==
                 "shimmer"
             ) {
                 explorerUrl =

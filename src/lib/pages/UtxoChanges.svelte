@@ -25,7 +25,7 @@
             let client = await getClient();
             for (let index = startIndex; index <= endIndex; index++) {
                 utxoChanges = utxoChanges.concat(
-                    await client.getUtxoChangesByIndex(index),
+                    await client.getUtxoChangesBySlot(index),
                 );
             }
             console.log(utxoChanges);
@@ -40,15 +40,15 @@
         try {
             let client = await getClient();
             output = await client.getOutput(outputId);
-            let info = await client.getInfo();
+            let nodeInfo = await client.getNodeInfo();
             if (
-                info.nodeInfo.protocolParameters[0].parameters.networkName ==
+                nodeInfo.info.protocolParameters[0].parameters.networkName ==
                 "testnet-1"
             ) {
                 explorerUrl =
                     "https://explorer.shimmer.network/testnet/transaction/";
             } else if (
-                info.nodeInfo.protocolParameters[0].parameters.networkName ==
+                nodeInfo.info.protocolParameters[0].parameters.networkName ==
                 "shimmer"
             ) {
                 explorerUrl =
@@ -61,8 +61,8 @@
 
     export const updateLatestSlotIndex = async (alertOnError: boolean) => {
         try {
-            let nodeInfo = await (await getClient()).getInfo();
-            endIndex = nodeInfo.nodeInfo.status.latestFinalizedSlot || 0;
+            let nodeInfo = await (await getClient()).getNodeInfo();
+            endIndex = nodeInfo.info.status.latestFinalizedSlot || 0;
             if (endIndex > 8) {
                 startIndex = endIndex - 9;
             }

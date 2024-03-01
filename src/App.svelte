@@ -1,4 +1,5 @@
 <script>
+  import AddressBalance from "./lib/pages/AddressBalance.svelte";
   import AddressConverter from "./lib/pages/AddressConverter.svelte";
   import AddressGeneration from "./lib/pages/AddressGeneration.svelte";
   import Indexer from "./lib/pages/Indexer.svelte";
@@ -12,6 +13,7 @@
     { label: "inx-indexer", component: Indexer },
     { label: "UTXO changes", component: UtxoChanges },
     { label: "address generation", component: AddressGeneration },
+    { label: "address balance", component: AddressBalance },
   ].map((e, index) => {
     // @ts-ignore
     e.value = index;
