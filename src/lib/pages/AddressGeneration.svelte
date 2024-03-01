@@ -14,7 +14,9 @@
     const generateMnemonic = () => {
         error = "";
         try {
-            mnemonic = Utils.generateMnemonic();
+            if (mnemonic == "") {
+                mnemonic = Utils.generateMnemonic();
+            }
             generateAddress();
         } catch (err: any) {
             error = JSON.stringify(JSON.parse(err.message).payload.error);
@@ -56,7 +58,7 @@
 </script>
 
 <main>
-    <button on:click={() => generateMnemonic()}> Generate mnemonic</button>
+    <button on:click={() => generateMnemonic()}>Generate</button>
     <input
         type="string"
         size="125"
