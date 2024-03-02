@@ -165,6 +165,21 @@
                     bind:value={additionalQueryParametersWithField[key]}
                 />
             {/each}
+            <div>
+                Created in:
+                <button
+                    on:click={() =>
+                        (additionalQueryParametersWithField["createdAfter"] =
+                            Math.round(Date.now() / 1000 - 3600))}
+                    >the last hour</button
+                >
+                <button
+                    on:click={() =>
+                        (additionalQueryParametersWithField["createdAfter"] =
+                            Math.round(Date.now() / 1000 - 86400))}
+                    >the last day</button
+                >
+            </div>
         </div>
         <div>
             <ul style="list-style-type:none; float: left;">

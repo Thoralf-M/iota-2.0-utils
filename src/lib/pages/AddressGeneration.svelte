@@ -32,7 +32,7 @@
                     accountIndex,
                     range: { start: addressIndex, end: addressIndex + 1 },
                     bech32Hrp,
-                    options: { internal },
+                    options: { internal, ledgerNanoPrompt: false },
                 })
             )[0];
             pubKeyHash = Utils.parseBech32Address(bech32Address).toString();
