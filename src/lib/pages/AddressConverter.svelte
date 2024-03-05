@@ -59,7 +59,14 @@
 
 <main>
     Address type:
-    <select bind:value={addressType} on:input={() => convertPubKeyHashOrId()}>
+    <select
+        bind:value={addressType}
+        on:input={() =>
+            // Without the small timeout it will convert the address with the previous type
+            setTimeout(() => {
+                convertPubKeyHashOrId();
+            }, 1)}
+    >
         {#each Object.keys(AddressType)
             .filter((addressName) => {
                 if (isNaN(Number(addressName)) && addressName != "Multi" && addressName != "Restricted") {
