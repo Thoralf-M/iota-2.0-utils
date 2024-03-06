@@ -22,6 +22,7 @@
         unlockableByAddress: "",
         address: "",
         tag: "",
+        nativeToken: "",
         timelockedBefore: "",
         timelockedAfter: "",
         createdBefore: "",
