@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getClient, nodeUrl } from "../Client.svelte";
-    import { OutputData, Wallet } from "@iota/sdk-wasm/web";
+    import { OutputData, Wallet, type SyncOptions } from "@iota/sdk-wasm/web";
 
     (BigInt.prototype as any).toJSON = function () {
         return this.toString(10);
@@ -13,6 +13,10 @@
     let wallet: Wallet;
     let unspentOutputs: OutputData[] = [];
     let error = "";
+
+    let visibleSyncOptions = false;
+    let syncOptions =
+        '{\r\n    "forceSyncing": false,\r\n    "syncIncomingTransactions": false,\r\n    "syncPendingTransactions": true,\r\n    "wallet": {\r\n        "basicOutputs": true,\r\n        "accountOutputs": true,\r\n        "nftOutputs": true,\r\n        "delegationOutputs": true\r\n    },\r\n    "account": {\r\n        "basicOutputs": true,\r\n        "accountOutputs": false,\r\n        "foundryOutputs": true,\r\n        "nftOutputs": false,\r\n        "delegationOutputs": false\r\n    },\r\n    "nft": {\r\n        "basicOutputs": false,\r\n        "accountOutputs": false,\r\n        "nftOutputs": false,\r\n        "delegationOutputs": false\r\n    },\r\n    "syncOnlyMostBasicOutputs": false,\r\n    "syncNativeTokenFoundries": false,\r\n    "syncImplicitAccounts": false\r\n}\r\n';
 
     const initWallet = async () => {
         if (
@@ -42,7 +46,7 @@
         error = "";
         try {
             await initWallet();
-            balance = await wallet.sync();
+            balance = await wallet.sync(JSON.parse(syncOptions));
             console.log(balance);
         } catch (err: any) {
             try {
@@ -57,7 +61,7 @@
         try {
             await initWallet();
 
-            await wallet.sync();
+            await wallet.sync(JSON.parse(syncOptions));
             unspentOutputs = await wallet.unspentOutputs();
         } catch (err: any) {
             try {
@@ -67,6 +71,10 @@
             }
         }
     };
+    const clearOutput = () => {
+        balance = undefined;
+        unspentOutputs = [];
+    };
 </script>
 
 <main>
@@ -74,11 +82,23 @@
         type="string"
         size="64"
         bind:value={walletAddress}
-        placeholder="bech32 address"
+        placeholder="wallet address (bech32 or also hex pubKeyHash for Ed25519)"
     />
     <br />
+
+    Show sync options:
+    <input type="checkbox" bind:checked={visibleSyncOptions} />
+    {#if visibleSyncOptions}
+        <textarea
+            cols="50"
+            rows="27"
+            bind:value={syncOptions}
+            placeholder="sync options"
+        />
+    {/if}
     <button on:click={getBalance}>get balance</button>
     <button on:click={getUnspentOutputs}>get unspent outputs</button>
+    <button on:click={clearOutput}>clear output</button>
     <br />
     {#if balance !== undefined}
         <pre>{JSON.stringify(balance, null, 2)}</pre>
