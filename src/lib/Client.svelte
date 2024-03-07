@@ -9,14 +9,21 @@
     });
 
     let loggerInitialized = false;
+    // Used to determine if the client should be initialized with a new node
+    let previousInitializedNodeUrl = "";
+    let client: Client;
     export const getClient = async () => {
         if (!loggerInitialized) {
-            await initLogger();
+            // await initLogger();
             loggerInitialized = true;
         }
-        return await Client.create({
-            nodes: [nodeUrl],
-        });
+        if (client == undefined || nodeUrl != previousInitializedNodeUrl) {
+            client = await Client.create({
+                nodes: [nodeUrl],
+            });
+            previousInitializedNodeUrl = nodeUrl;
+        }
+        return client;
     };
 
     function localStorageStore(key: string, initial: string) {

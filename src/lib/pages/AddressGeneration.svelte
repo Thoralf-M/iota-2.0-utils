@@ -63,7 +63,7 @@
         type="string"
         size="125"
         bind:value={mnemonic}
-        placeholder="24 word BIP-39 mnemonic"
+        placeholder="24 word BIP-39 mnemonic. Only for testing purposes, never use one with mainnet funds!"
     />
     <br />
 

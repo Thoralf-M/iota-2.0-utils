@@ -19,6 +19,7 @@
     "vite-plugin-static-copy": "^1.0.1"
   },
   "dependencies": {
-    "@iota/sdk-wasm": "link:../iota-sdk/bindings/wasm"
+    "@iota/sdk-wasm": "link:../iota-sdk/bindings/wasm",
+    "vivagraphjs": "^0.12.0"
   }
 }

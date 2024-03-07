@@ -287,6 +287,11 @@ acorn@^8.10.0, acorn@^8.9.0:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.11.3.tgz#71e0b14e13a4ec160724b38fb7b0f233b1b81d7a"
   integrity sha512-Y9rRfJG5jcKOE0CLisYbojUjIrIEE7AGMzA/Sm4BslANhbS+cDMpgBdcPT91oJ7OuJ9hYJBx59RjbhxVnrF8Xg==
 
+add-event-listener@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/add-event-listener/-/add-event-listener-0.0.1.tgz#a76229ebc64c8aefae204a16273a2f255abea2d0"
+  integrity sha512-hjRmkeDqFUWEFcDHP/Lp0Pa4MhIJk/oQX8B7lFiNrjBKHjf0q+ivCJrucY8d8UI5d0QkZgV2jGdAGXxEZcm3nA==
+
 anymatch@~3.1.2:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/anymatch/-/anymatch-3.1.3.tgz#790c58b19ba1720a84205b57c618d5ad8524973e"
@@ -495,6 +500,11 @@ fsevents@^2.3.2, fsevents@~2.3.2, fsevents@~2.3.3:
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.3.tgz#cac6407785d03675a2a5e1a5305c697b347d90d6"
   integrity sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==
 
+gintersect@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/gintersect/-/gintersect-0.1.0.tgz#9a8cb6a80b7d6e955ac33515495b1212627b1816"
+  integrity sha512-jps8Ckj6u8yLxOYzBVJbPqvRdeHOINQgRtufaLHkunwNQcSEdZU0ejPBapSimXJEQ9mdQW4hsEUN7DfJEcTvQQ==
+
 glob-parent@^5.1.2, glob-parent@~5.1.2:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-5.1.2.tgz#869832c58034fe68a4093c17dc15e8340d8401c4"
@@ -654,6 +664,100 @@ nanoid@^3.3.7:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.7.tgz#d0c301a691bc8d54efa0a2226ccf3fe2fd656bd8"
   integrity sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==
 
+ngraph.centrality@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/ngraph.centrality/-/ngraph.centrality-0.3.0.tgz#8cc0ec0319ef0a374357fc1044c16975b179d09d"
+  integrity sha512-Qmu9dDHJAx+GAW2AMqmhaub1rINS+fHZGZJ3zPI36ENAXmVNQ/Jkq79br1sg6NUHz/pRBT9MXMuwDyYKmMt8Mw==
+
+ngraph.events@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/ngraph.events/-/ngraph.events-0.0.3.tgz#38f55316f3d207ad631ff94f6622ca8f2c0e87d0"
+  integrity sha512-UrewofHOFk/05otBm9GD4DA3PTEY/yaElhCclmGC4IcmAYaSDRrC3lENQxJ00AzeBnz1GY2xH7Ct7AfIdhsdWA==
+
+ngraph.events@0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/ngraph.events/-/ngraph.events-0.0.4.tgz#72cb364488dd0fd7f057458449f6a3b17a722d9a"
+  integrity sha512-SY7MdNQoy5KyaVxg03PYCnGF6J7l4p8lEdmYm/5oIqFAmLhg0BmzZzlRqobJ0nEPT6xZlonUQbvCcXtarPZNrg==
+
+ngraph.expose@0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/ngraph.expose/-/ngraph.expose-0.0.0.tgz#746c34903a3848c45d033b14bc64619ea85fe5aa"
+  integrity sha512-Hr88MuhgoSLVGf2aaaXcKl22Rn95duWsjRcoeJMP9PtFmYHGFw/3ctDqBf5phnIyktm0P/Quxs5EGg6xgJcZAQ==
+
+ngraph.forcelayout@0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/ngraph.forcelayout/-/ngraph.forcelayout-0.5.0.tgz#51511c3e1db45d3d5436da75dfb1d6af097916f5"
+  integrity sha512-qOd1S9unFLw313+l0M/Dk1MePLDUSl4h9RyOtAbo0CyeefnN4PICiRz0LOewR5WuFmQD0/RmZLpjTKu0H7LTKQ==
+  dependencies:
+    ngraph.events "0.0.4"
+    ngraph.physics.simulator "^0.3.0"
+
+ngraph.fromjson@0.1.9:
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/ngraph.fromjson/-/ngraph.fromjson-0.1.9.tgz#66910b664c69fa3c50a1ce79dd1dfdd5bab46f6e"
+  integrity sha512-f3GLjbUq239wx4s5A0fDptj9dcNeaEIJU3gm74hWvYK7onD7sFtedP7jVHZA7UJ2FwkKgEhzbPeltv92ycuKZQ==
+  dependencies:
+    ngraph.graph "0.0.14"
+
+ngraph.generators@0.0.19:
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/ngraph.generators/-/ngraph.generators-0.0.19.tgz#552c0d087f942b9d0d2b0c6ca9aac436befa7659"
+  integrity sha512-P3XqB1sH4zrzM6bMGTtuT/6K76Rnhf1qE8Zu7PkAvhQVCQzdLYiL2/8DwhcPLsetRJHNJv0uwpW9TpntBAqKrw==
+  dependencies:
+    ngraph.graph "0.0.14"
+    ngraph.random "0.1.0"
+
+ngraph.graph@0.0.14:
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/ngraph.graph/-/ngraph.graph-0.0.14.tgz#d47ac94967c920aaf76952d8a4e73346e1df2db7"
+  integrity sha512-ERTLng4KrsGbR7iLZFvg5H+zJ7V+SY8RDqZKYCnOZib5W8M5LCvcil9/8eiJcTRUIPPXW3j8hqPCdLnBvgsn/A==
+  dependencies:
+    ngraph.events "0.0.3"
+
+ngraph.merge@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/ngraph.merge/-/ngraph.merge-0.0.1.tgz#e4e80ce37581a3c96b17d545e3a43c85434b9025"
+  integrity sha512-iXchI5xMjYzA96mee//O7I7gtd4cCakWaSTu11aMTxRDbvBK2qpDDytYg58jO3usAUkjFxBdy1gxYppKmBDuRQ==
+
+ngraph.physics.primitives@0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/ngraph.physics.primitives/-/ngraph.physics.primitives-0.0.7.tgz#5dc9e179ba1f92e6dec774b01cd68914120b795b"
+  integrity sha512-7jPm14fYcuJ9kytOVNOKxFy6r/Uu9Dnj++uT3iR9XkBcsBahn2xcYJkV6vF1bIb1fQ5XrDCRjRIOcMwEum6jwQ==
+
+ngraph.physics.simulator@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/ngraph.physics.simulator/-/ngraph.physics.simulator-0.3.0.tgz#7ca6fc3e3617c73e1080572eaa8e04dbb77e0102"
+  integrity sha512-ObW+HL+hQBIIdc6xG/+qrLe8qv+Sf0X3lq/l2hsjFrIwWtpRKLrSvUUoXiNIeFqRmY/C+PkGo3U+XY523lJ+Fw==
+  dependencies:
+    ngraph.events "0.0.3"
+    ngraph.expose "0.0.0"
+    ngraph.merge "0.0.1"
+    ngraph.physics.primitives "0.0.7"
+    ngraph.quadtreebh "0.0.4"
+    ngraph.random "0.0.1"
+
+ngraph.quadtreebh@0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/ngraph.quadtreebh/-/ngraph.quadtreebh-0.0.4.tgz#c700d44e6e4af07b6d05001ba3987ff5e2dcd62c"
+  integrity sha512-xTIkWGXt5Ajnoq9VOr0xDOI9ZL+q4sPhD0Z7vxvn4MCa+l0wf43rg0C7qv0t+RIOgbQBAp0xDpn568hpXAckJA==
+  dependencies:
+    ngraph.random "0.0.1"
+
+ngraph.random@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/ngraph.random/-/ngraph.random-0.0.1.tgz#c008e2ebbfdffaf17ed10e4bbc913e567166bcf8"
+  integrity sha512-QPKU7ChXF/VrvMQxVo9aWcvXCXp98VfL4nKUteTW/olDqeUqQ61t7m+jvFb8Dj7kKvlKlnsbDA1aWLJGmm17XA==
+
+ngraph.random@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/ngraph.random/-/ngraph.random-0.1.0.tgz#1b6e9573529e080677da6ffa098790d76a0948a9"
+  integrity sha512-KXCfzk/ZB79BxQSWMvYPGayx3Mb+7n5GPnc8SW0rwysqRV/3QxEKrLU/UVC8eGjc2SYGofqX+uhUE6IXfqR5VA==
+
+ngraph.tojson@0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/ngraph.tojson/-/ngraph.tojson-0.1.4.tgz#39f0046588440ade622d58734d589d7974a0b3bc"
+  integrity sha512-Ii2BTqi8zBRMLH8vTc8pMUKQFJaqbgttG9DKUaazoPVpwC/ww4jyTOHe2ZKaGGZRepnGLqSZ27wZUm7n8MjIgA==
+
 node-fetch@^2.6.7:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.7.0.tgz#d0f0fa6e3e2dc1d27efcd8ad99d550bda94d187d"
@@ -793,6 +897,13 @@ sander@^0.5.0:
     mkdirp "^0.5.1"
     rimraf "^2.5.2"
 
+simplesvg@0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/simplesvg/-/simplesvg-0.0.10.tgz#37d2ec18de2c154dd9b69f79e8ad20bf1e1e5fdd"
+  integrity sha512-iCVx1A/kI4U3cGPRMRQaGLbIFNDXuB8rsaAsO2mM5wYFDs/MrfmHhrSCqNbOylgt9MhhZU3uMsSQnZM853kwXQ==
+  dependencies:
+    add-event-listener "0.0.1"
+
 sorcery@^0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/sorcery/-/sorcery-0.11.0.tgz#310c80ee993433854bb55bb9aa4003acd147fca8"
@@ -912,6 +1023,23 @@ vitefu@^0.2.5:
   version "0.2.5"
   resolved "https://registry.yarnpkg.com/vitefu/-/vitefu-0.2.5.tgz#c1b93c377fbdd3e5ddd69840ea3aa70b40d90969"
   integrity sha512-SgHtMLoqaeeGnd2evZ849ZbACbnwQCIwRH57t18FxcXoZop0uQu0uzlIhJBlF/eWVzuce0sHeqPcDo+evVcg8Q==
+
+vivagraphjs@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/vivagraphjs/-/vivagraphjs-0.12.0.tgz#6fd06ef6136aaeca5cffea86d6d6f8bfaff7f52b"
+  integrity sha512-Air+vUHXAWj8NTWUnbU800yKC7SiHpCVwpKIPfDtr5436YoMd7cpg8blt6Fn9xarx+sz1osRxGHBHTaHvcsR6Q==
+  dependencies:
+    gintersect "0.1.0"
+    ngraph.centrality "0.3.0"
+    ngraph.events "0.0.3"
+    ngraph.forcelayout "0.5.0"
+    ngraph.fromjson "0.1.9"
+    ngraph.generators "0.0.19"
+    ngraph.graph "0.0.14"
+    ngraph.merge "0.0.1"
+    ngraph.random "0.0.1"
+    ngraph.tojson "0.1.4"
+    simplesvg "0.0.10"
 
 webidl-conversions@^3.0.0:
   version "3.0.1"

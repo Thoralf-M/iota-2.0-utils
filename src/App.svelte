@@ -4,6 +4,7 @@
   import AddressGeneration from "./lib/pages/AddressGeneration.svelte";
   import Indexer from "./lib/pages/Indexer.svelte";
   import UtxoChanges from "./lib/pages/UtxoChanges.svelte";
+  import UtxoDag from "./lib/pages/UtxoDag.svelte";
   import Client from "./lib/Client.svelte";
   import Tabs from "./lib/Tabs.svelte";
 
@@ -12,6 +13,7 @@
     { label: "address converter", component: AddressConverter },
     { label: "inx-indexer", component: Indexer },
     { label: "UTXO changes", component: UtxoChanges },
+    { label: "UTXO DAG", component: UtxoDag },
     { label: "address generation", component: AddressGeneration },
     { label: "address balance", component: AddressBalance },
   ].map((e, index) => {
@@ -23,3 +25,9 @@
 
 <Client />
 <Tabs {items} />
+
+<a
+  href="https://github.com/Thoralf-M/iota-utils"
+  target="_blank"
+  rel="noopener noreferrer">https://github.com/Thoralf-M/iota-utils</a
+>
