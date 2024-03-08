@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getClient } from "../Client.svelte";
-    import { OutputType, Utils } from "@iota/sdk-wasm/web";
+    import { Client, OutputType, Utils } from "@iota/sdk-wasm/web";
     import * as Viva from "vivagraphjs";
 
     let round = 0;
@@ -16,6 +16,17 @@
     let renderer: any;
     let graph: any;
     let graphics: any;
+
+    const getRandomOutputId = async () => {
+        try {
+            let client = await getClient();
+            let outputIds = (await client.outputIds({ cursor: "" })).items;
+            startingOutputId =
+                outputIds[Math.floor(Math.random() * outputIds.length)];
+        } catch (err) {
+            alert(err);
+        }
+    };
 
     const getOutput = async (outputId: string) => {
         try {
@@ -35,41 +46,37 @@
             var nodeUI = graphics.getNodeUI(outputId);
 
             nodeUI.color = getOutputColor(output.output.type);
+            nodeUI.size = output.metadata.spent ? 10 : 15;
         } catch (err) {
             alert(err);
         }
     };
 
-    // TODO: cleanup and fix, still doesn't fetch all cases
-    const getMoreOutputs = async (
-        client,
-        outputWithMetadata,
-        transactionId: string,
-    ) => {
+    const getMoreOutputs = async (client: Client, transactionId: string) => {
         try {
             knownTransactionIds.add(transactionId);
             let block = await client.getIncludedBlock(transactionId);
 
             let outputIds = [];
-            block
+            for (const [index, output] of block
                 .asBasic()
-                .payload.transaction.outputs.forEach(async (output, index) => {
-                    try {
-                        let outputId = Utils.computeOutputId(
-                            transactionId,
-                            index,
-                        );
-                        await getOutput(outputId);
-                        outputIds.push(outputId);
-                        graph.addLink(
-                            outputId,
-                            outputWithMetadata.metadata.outputId,
-                            {},
-                        );
-                    } catch (err) {
-                        console.log(err);
+                .payload.transaction.outputs.entries()) {
+                try {
+                    let outputId = Utils.computeOutputId(transactionId, index);
+                    await getOutput(outputId);
+                    outputIds.push(outputId);
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+
+            for (let outputId of outputIds) {
+                for (let outputIdInner of outputIds) {
+                    if (outputId != outputIdInner) {
+                        graph.addLink(outputId, outputIdInner);
                     }
-                });
+                }
+            }
 
             for (let input of block.asBasic().payload.transaction.inputs) {
                 let inputOutputId = Utils.computeOutputId(
@@ -79,7 +86,7 @@
                 try {
                     await getOutput(inputOutputId);
                     for (let outputId of outputIds) {
-                        graph.addLink(outputId, inputOutputId, {});
+                        graph.addLink(outputId, inputOutputId);
                     }
                 } catch (err) {
                     console.log(err);
@@ -93,9 +100,7 @@
     const getRelatedOutputs = async () => {
         for (let i = 0; i < relatedOutputsRequests; i++) {
             round = i;
-            // TODO: doesn't really seem to await, that's why the timeout below
             await getRelatedOutputsInner();
-            await new Promise((resolve) => setTimeout(resolve, 200));
         }
     };
     const getRelatedOutputsInner = async () => {
@@ -106,11 +111,7 @@
                     outputWithMetadata.metadata.outputId,
                 );
                 if (!knownTransactionIds.has(transactionId)) {
-                    await getMoreOutputs(
-                        client,
-                        outputWithMetadata,
-                        transactionId,
-                    );
+                    await getMoreOutputs(client, transactionId);
                 }
 
                 if (!outputWithMetadata.metadata.spent) {
@@ -119,11 +120,7 @@
                 transactionId = outputWithMetadata.metadata.spent.transactionId;
 
                 if (!knownTransactionIds.has(transactionId)) {
-                    await getMoreOutputs(
-                        client,
-                        outputWithMetadata,
-                        transactionId,
-                    );
+                    await getMoreOutputs(client, transactionId);
                 }
             } catch (err) {
                 console.log(err);
@@ -191,7 +188,7 @@
             .mouseLeave(function (node) {
                 var nodeUI = graphics.getNodeUI(node.id);
                 nodeUI.color = getOutputColor(utxos[node.id].output.type);
-                nodeUI.size = 10;
+                nodeUI.size = utxos[node.id].metadata.spent ? 10 : 15;
             });
         // .dblClick(function (node) {
         //     console.log("Double click on node: " + node.id);
@@ -218,20 +215,46 @@
             simulation on
         {/if}
     </button>
+    <button on:click={() => getRandomOutputId()}>random output id</button>
     <button on:click={() => getOutput(startingOutputId)}>get output</button>
     <input
         type="string"
-        size="75"
+        size="71"
         bind:value={startingOutputId}
         placeholder="output id"
     />
     <button on:click={() => getRelatedOutputs()}>get related outputs</button>
-    Amount of requests:
+    Distance:
     <input size="2" bind:value={relatedOutputsRequests} placeholder="rounds" />
-    Round: {round}
+    Progress: {round}
 
     <div id="graph" style="background-color: black;"></div>
-    <div id="selected">{selectedNode}</div>
+    <div id="selectedOutput">{selectedNode}</div>
+
+    <div id="legend" style="text-align: left;">
+        Unspent outputs are displayed larger. Output colors:
+        {#each Object.keys(OutputType)
+            .filter((outputName) => {
+                if (isNaN(Number(outputName))) {
+                    return outputName;
+                }
+            })
+            .map((outputType) => {
+                // @ts-ignore
+                return { outputType, typeByte: OutputType[outputType] };
+            }) as filter}
+            <div class="type-color">
+                {filter.outputType}:
+                <div
+                    class="color-box"
+                    style="background-color: #{getOutputColor(filter.typeByte)
+                        .toString(16)
+                        .padStart(6, '0')};"
+                ></div>
+            </div>
+        {/each}
+    </div>
+
     <pre style="text-align: left; display: flex;">
             {JSON.stringify(selectedNodeData, null, 1).trim()}
    </pre>
@@ -244,18 +267,34 @@
         min-height: 50rem;
         position: relative;
     }
-    #selected {
+    #selectedOutput {
         position: relative;
         top: -50rem;
     }
 
     button {
-        margin: 1rem;
+        margin: 0.1rem;
     }
 
     button.active {
         color: #495057;
         background-color: #fff;
         border-color: #dee2e6 #dee2e6 #fff;
+    }
+
+    #legend {
+        display: flex;
+    }
+
+    .type-color {
+        display: flex;
+        margin-left: 5px;
+    }
+
+    .color-box {
+        width: 15px;
+        height: 15px;
+        margin-top: 5px;
+        margin-left: 5px;
     }
 </style>
