@@ -23,6 +23,7 @@
             let outputIds = (await client.outputIds({ cursor: "" })).items;
             startingOutputId =
                 outputIds[Math.floor(Math.random() * outputIds.length)];
+            getOutput(startingOutputId);
         } catch (err) {
             alert(err);
         }
@@ -131,7 +132,7 @@
     function getOutputColor(outputType: OutputType) {
         switch (outputType) {
             case OutputType.Basic:
-                return 0xff5733ff;
+                return 0x009ee8ff;
             case OutputType.Account:
                 return 0x6aa84fff;
             case OutputType.Anchor:
@@ -143,7 +144,7 @@
             case OutputType.Delegation:
                 return 0x8400ffff;
             default:
-                return 0x009ee8ff;
+                return 0xff5733ff;
         }
     }
 
