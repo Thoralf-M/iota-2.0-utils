@@ -17,6 +17,10 @@
     let graph: any;
     let graphics: any;
 
+    let sizeSpent = 10;
+    let sizeUnspent = 15;
+    let sizeSelected = 20;
+
     const getRandomOutputId = async () => {
         try {
             let client = await getClient();
@@ -56,7 +60,7 @@
             var nodeUI = graphics.getNodeUI(outputId);
 
             nodeUI.color = getOutputColor(output.output.type);
-            nodeUI.size = output.metadata.spent ? 10 : 15;
+            nodeUI.size = output.metadata.spent ? sizeSpent : sizeUnspent;
         } catch (err) {
             alert(err);
         }
@@ -125,6 +129,12 @@
                     );
                     if (newOutputMetadata.spent) {
                         outputWithMetadata.metadata = newOutputMetadata;
+
+                        // Update to spent size
+                        let nodeUI = graphics.getNodeUI(
+                            outputWithMetadata.metadata.outputId,
+                        );
+                        nodeUI.size = sizeSpent;
                     }
                 }
             }
@@ -201,7 +211,7 @@
             .mouseEnter(function (node) {
                 var nodeUI = graphics.getNodeUI(node.id);
                 nodeUI.color = 0xffa500ff;
-                nodeUI.size = 20;
+                nodeUI.size = sizeSelected;
 
                 selectedNode = node.id;
                 let simplified = utxos[node.id];
@@ -211,7 +221,9 @@
             .mouseLeave(function (node) {
                 var nodeUI = graphics.getNodeUI(node.id);
                 nodeUI.color = getOutputColor(utxos[node.id].output.type);
-                nodeUI.size = utxos[node.id].metadata.spent ? 10 : 15;
+                nodeUI.size = utxos[node.id].metadata.spent
+                    ? sizeSpent
+                    : sizeUnspent;
             });
         // .dblClick(function (node) {
         //     console.log("Double click on node: " + node.id);
