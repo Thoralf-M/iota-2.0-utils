@@ -20,7 +20,16 @@
     const getRandomOutputId = async () => {
         try {
             let client = await getClient();
-            let outputIds = (await client.outputIds({ cursor: "" })).items;
+
+            let protocolParameters = await client.getProtocolParameters();
+            let outputIds = (
+                await client.outputIds({
+                    cursor: "",
+                    // get output with transaction (not created in genesis snapshot)
+                    createdAfter: protocolParameters.genesisSlot,
+                })
+            ).items;
+
             startingOutputId =
                 outputIds[Math.floor(Math.random() * outputIds.length)];
             getOutput(startingOutputId);
@@ -107,6 +116,19 @@
     const getRelatedOutputsInner = async () => {
         let client = await getClient();
         for (let outputWithMetadata of Object.values(utxos)) {
+            if (checkIfUnspentOutputsGotSpent) {
+                // See if the metadata got updated by now
+                // Could speed this up by caching the slot index, get utxo changes since then and only fetch metadata for theses outputs
+                if (!outputWithMetadata.metadata.spent) {
+                    let newOutputMetadata = await client.getOutputMetadata(
+                        outputWithMetadata.metadata.outputId,
+                    );
+                    if (newOutputMetadata.spent) {
+                        outputWithMetadata.metadata = newOutputMetadata;
+                    }
+                }
+            }
+
             try {
                 let transactionId = Utils.transactionIdFromOutputId(
                     outputWithMetadata.metadata.outputId,
@@ -205,6 +227,10 @@
         running ? renderer.pause() : renderer.resume();
         running = !running;
     }
+    let checkIfUnspentOutputsGotSpent = true;
+    function toggleCheckIfUnspentOutputsGotSpent() {
+        checkIfUnspentOutputsGotSpent = !checkIfUnspentOutputsGotSpent;
+    }
     // potential improvements using https://github.com/anvaka/VivaGraphJS/issues/12#issuecomment-9130560
 </script>
 
@@ -228,6 +254,16 @@
     Distance:
     <input size="2" bind:value={relatedOutputsRequests} placeholder="rounds" />
     Progress: {round}
+    <button
+        on:click={toggleCheckIfUnspentOutputsGotSpent}
+        class={checkIfUnspentOutputsGotSpent ? "active" : ""}
+    >
+        {#if !checkIfUnspentOutputsGotSpent}
+            check if unspent outputs got spent (slower)
+        {:else}
+            check if unspent outputs got spent (slower)
+        {/if}
+    </button>
 
     <div id="graph" style="background-color: black;"></div>
     <div id="selectedOutput">{selectedNode}</div>

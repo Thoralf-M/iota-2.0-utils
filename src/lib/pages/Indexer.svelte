@@ -131,6 +131,16 @@
         }
         return result;
     };
+
+    const slotBeforeSeconds = async (seconds: number) => {
+        let client = await getClient();
+        let nodeInfo = (await client.getNodeInfo()).info;
+        return (
+            nodeInfo.status.latestConfirmedBlockSlot -
+            seconds /
+                nodeInfo.protocolParameters[0].parameters.slotDurationInSeconds
+        );
+    };
 </script>
 
 <main>
@@ -169,15 +179,15 @@
             <div>
                 Created in:
                 <button
-                    on:click={() =>
+                    on:click={async () =>
                         (additionalQueryParametersWithField["createdAfter"] =
-                            Math.round(Date.now() / 1000 - 3600))}
+                            await slotBeforeSeconds(3600))}
                     >the last hour</button
                 >
                 <button
-                    on:click={() =>
+                    on:click={async () =>
                         (additionalQueryParametersWithField["createdAfter"] =
-                            Math.round(Date.now() / 1000 - 86400))}
+                            await slotBeforeSeconds(86400))}
                     >the last day</button
                 >
             </div>
