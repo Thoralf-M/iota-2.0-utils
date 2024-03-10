@@ -21,6 +21,8 @@
     let sizeUnspent = 15;
     let sizeSelected = 20;
 
+    let latestSyncedSlot = 0;
+
     const getRandomOutputId = async () => {
         try {
             let client = await getClient();
@@ -50,6 +52,12 @@
                 return;
             }
             let client = await getClient();
+
+            if (latestSyncedSlot == 0) {
+                let info = (await client.getNodeInfo()).info;
+                latestSyncedSlot = info.status.latestFinalizedSlot;
+            }
+
             let output = await client.getOutputWithMetadata(outputId);
 
             utxos[outputId] = output;
@@ -68,6 +76,9 @@
 
     const getMoreOutputs = async (client: Client, transactionId: string) => {
         try {
+            if (knownTransactionIds.has(transactionId)) {
+                return;
+            }
             knownTransactionIds.add(transactionId);
             let block = await client.getIncludedBlock(transactionId);
 
@@ -112,6 +123,37 @@
     };
 
     const getRelatedOutputs = async () => {
+        // Check for new spent outputs with UTXO changes
+        if (latestSyncedSlot != 0) {
+            let client = await getClient();
+            let info = (await client.getNodeInfo()).info;
+            let newLatestSyncedSlot = info.status.latestFinalizedSlot;
+
+            for (
+                let slot = latestSyncedSlot;
+                slot < newLatestSyncedSlot;
+                slot++
+            ) {
+                let utxoChanges = await client.getUtxoChangesBySlot(slot);
+                for (let consumedOutputId of utxoChanges.consumedOutputs) {
+                    let entry = utxos[consumedOutputId];
+                    if (entry) {
+                        console.log(entry);
+                        let newOutputMetadata =
+                            await client.getOutputMetadata(consumedOutputId);
+
+                        entry.metadata = newOutputMetadata;
+
+                        // Update to spent size
+                        let nodeUI = graphics.getNodeUI(
+                            entry.metadata.outputId,
+                        );
+                        nodeUI.size = sizeSpent;
+                    }
+                }
+            }
+            latestSyncedSlot = newLatestSyncedSlot;
+        }
         for (let i = 0; i < relatedOutputsRequests; i++) {
             round = i;
             await getRelatedOutputsInner();
@@ -119,42 +161,20 @@
     };
     const getRelatedOutputsInner = async () => {
         let client = await getClient();
+
         for (let outputWithMetadata of Object.values(utxos)) {
-            if (checkIfUnspentOutputsGotSpent) {
-                // See if the metadata got updated by now
-                // Could speed this up by caching the slot index, get utxo changes since then and only fetch metadata for theses outputs
-                if (!outputWithMetadata.metadata.spent) {
-                    let newOutputMetadata = await client.getOutputMetadata(
-                        outputWithMetadata.metadata.outputId,
-                    );
-                    if (newOutputMetadata.spent) {
-                        outputWithMetadata.metadata = newOutputMetadata;
-
-                        // Update to spent size
-                        let nodeUI = graphics.getNodeUI(
-                            outputWithMetadata.metadata.outputId,
-                        );
-                        nodeUI.size = sizeSpent;
-                    }
-                }
-            }
-
             try {
                 let transactionId = Utils.transactionIdFromOutputId(
                     outputWithMetadata.metadata.outputId,
                 );
-                if (!knownTransactionIds.has(transactionId)) {
-                    await getMoreOutputs(client, transactionId);
-                }
+                await getMoreOutputs(client, transactionId);
 
                 if (!outputWithMetadata.metadata.spent) {
                     continue;
                 }
                 transactionId = outputWithMetadata.metadata.spent.transactionId;
 
-                if (!knownTransactionIds.has(transactionId)) {
-                    await getMoreOutputs(client, transactionId);
-                }
+                await getMoreOutputs(client, transactionId);
             } catch (err) {
                 console.log(err);
             }
@@ -239,10 +259,7 @@
         running ? renderer.pause() : renderer.resume();
         running = !running;
     }
-    let checkIfUnspentOutputsGotSpent = true;
-    function toggleCheckIfUnspentOutputsGotSpent() {
-        checkIfUnspentOutputsGotSpent = !checkIfUnspentOutputsGotSpent;
-    }
+
     // potential improvements using https://github.com/anvaka/VivaGraphJS/issues/12#issuecomment-9130560
 </script>
 
@@ -266,16 +283,6 @@
     Distance:
     <input size="2" bind:value={relatedOutputsRequests} placeholder="rounds" />
     Progress: {round}
-    <button
-        on:click={toggleCheckIfUnspentOutputsGotSpent}
-        class={checkIfUnspentOutputsGotSpent ? "active" : ""}
-    >
-        {#if !checkIfUnspentOutputsGotSpent}
-            check if unspent outputs got spent (slower)
-        {:else}
-            check if unspent outputs got spent (slower)
-        {/if}
-    </button>
 
     <div id="graph" style="background-color: black;"></div>
     <div id="selectedOutput">{selectedNode}</div>
@@ -304,7 +311,8 @@
         {/each}
     </div>
 
-    <pre style="text-align: left; display: flex;">
+    <pre
+        style="text-align: left; display: flex; white-space: pre-wrap; overflow-wrap: anywhere;">
             {JSON.stringify(selectedNodeData, null, 1).trim()}
    </pre>
 </main>
