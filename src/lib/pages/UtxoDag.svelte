@@ -95,14 +95,6 @@
                 }
             }
 
-            for (let outputId of outputIds) {
-                for (let outputIdInner of outputIds) {
-                    if (outputId != outputIdInner) {
-                        graph.addLink(outputId, outputIdInner);
-                    }
-                }
-            }
-
             for (let input of block.asBasic().payload.transaction.inputs) {
                 let inputOutputId = Utils.computeOutputId(
                     input.transactionId,
@@ -138,7 +130,6 @@
                 for (let consumedOutputId of utxoChanges.consumedOutputs) {
                     let entry = utxos[consumedOutputId];
                     if (entry) {
-                        console.log(entry);
                         let newOutputMetadata =
                             await client.getOutputMetadata(consumedOutputId);
 
