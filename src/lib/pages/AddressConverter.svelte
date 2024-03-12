@@ -10,6 +10,7 @@
         ImplicitAccountCreationAddress,
     } from "@iota/sdk-wasm/web";
 
+    let publicKeyOrOutputId = "";
     let pubKeyHashOrId = "";
     let bech32Address = "";
     let addressType = AddressType.Ed25519;
@@ -55,9 +56,29 @@
             error = JSON.stringify(JSON.parse(err.message).payload.error);
         }
     };
+    const blake2b256Hash = () => {
+        error = "";
+        try {
+            // Called `computeAccountId()` but works the same for output IDs
+            let hash = Utils.computeAccountId(publicKeyOrOutputId);
+            pubKeyHashOrId = hash;
+            convertPubKeyHashOrId();
+        } catch (err: any) {
+            error = JSON.stringify(JSON.parse(err.message).payload.error);
+        }
+    };
 </script>
 
 <main>
+    Public key/ output ID:
+    <input
+        type="string"
+        size="64"
+        bind:value={publicKeyOrOutputId}
+        on:input={() => blake2b256Hash()}
+        placeholder="public key or output ID to hash with blake2b256"
+    />
+    <br />
     Address type:
     <select
         bind:value={addressType}
@@ -88,7 +109,7 @@
         size="64"
         bind:value={pubKeyHashOrId}
         on:input={() => convertPubKeyHashOrId()}
-        placeholder="pubKeyHash or ID"
+        placeholder="public key or account/nft/anchor ID"
     />
     <br />
     Bech32 HRP:
