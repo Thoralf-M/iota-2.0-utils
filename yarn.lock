@@ -125,9 +125,16 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.19.12.tgz#c57c8afbb4054a3ab8317591a0b7320360b444ae"
   integrity sha512-T1QyPSDCyMXaO3pzBkF96E8xMkiRYbUEZADd29SyPGabqxMViNoii+NcK7eWJAEoU6RZyEm5lVSIjTmcdoB9HA==
 
-"@iota/sdk-wasm@link:../iota-sdk/bindings/wasm":
-  version "0.0.0"
-  uid ""
+"@iota/sdk-wasm@^2.0.0-alpha.1":
+  version "2.0.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@iota/sdk-wasm/-/sdk-wasm-2.0.0-alpha.1.tgz#e5df25723ab11abb0422dc825419c52ebd228d85"
+  integrity sha512-o9RaDHO/kM0VJCyAHBhxB8mNbdnr/anHYuBz7q+QnDAj+6XupsBWz8OofvjQY3YywFTChgplSmgf4CS0xHlQaQ==
+  dependencies:
+    class-transformer "^0.5.1"
+    node-fetch "^2.6.7"
+    reflect-metadata "^0.1.13"
+  optionalDependencies:
+    fsevents "^2.3.2"
 
 "@jridgewell/gen-mapping@^0.3.0":
   version "0.3.4"
