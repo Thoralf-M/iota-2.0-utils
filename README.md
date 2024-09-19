@@ -1,4 +1,4 @@
-# IOTA utils
+# IOTA 2.0 utils
 
 https://thoralf-m.github.io/iota-2.0-utils
 
